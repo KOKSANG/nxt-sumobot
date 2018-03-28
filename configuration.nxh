@@ -1,0 +1,42 @@
+#ifndef CONFIGURATION_HEADER
+#define CONFIGURATION_HEADER 1
+
+#define ULTRASONIC_SENSOR SensorUS(IN_1)
+#define TOUCH_SENSOR Sensor(IN_2)
+#define SOUND_SENSOR Sensor(IN_3)
+#define LDR_SENSOR Sensor(IN_4)
+
+#define BOTH_MOTORS OUT_AC
+#define LEFT_MOTOR OUT_A
+#define RIGHT_MOTOR OUT_C
+#define FLIP_MOTOR OUT_B
+#define ALL_MOTORS OUT_ABC
+
+#define FORWARD_SPEED 100
+#define ROTATE_SPEED 100
+#define FLIP_SPEED 100
+
+#define ROTATION_ANGLE 180
+#define FLIP_ANGLE 60
+
+#define ANTICLOCKWISE -1
+#define CLOCKWISE 1
+
+#define ULTRASONIC_DETECTION_DISTANCE 35
+#define LDR_DETECTION_LIMIT 10
+#define CLAP_DETECTION_LIMIT 98
+
+task movement();
+task edgeDetection();
+task clapDetection();
+task enemyDetection();
+
+bool clap_status = 0;
+bool edgeDetected;
+bool enemyFound;
+
+
+#endif
+
+
+

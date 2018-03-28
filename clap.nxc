@@ -1,0 +1,27 @@
+#include "configuration.nxh"
+
+bool clap = 0, lastclap = 0; 
+
+
+task clapDetection()
+{
+  while (true)
+	{
+		clap = (SOUND_SENSOR >= CLAP_DETECTION_LIMIT)? 1 : 0;
+		
+		if (clap != lastclap)
+		{
+			if (clap == 1)
+			{
+				clap_status = !clap_status;
+				PlayTone(1000,10);
+				Wait(100);
+			}
+			
+			Wait(500);
+		}
+		
+		lastclap = clap;
+	}
+		
+}

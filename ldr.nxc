@@ -1,0 +1,20 @@
+#include "configuration.nxh"
+
+int initial_light = 0;
+
+task edgeDetection()
+{
+	//Wait(1000);
+  initial_light = LDR_SENSOR;
+	
+	while(true)
+	{
+		if (LDR_SENSOR < (initial_light - LDR_DETECTION_LIMIT))
+			edgeDetected = true;
+		
+		else
+			edgeDetected = false;
+	}
+	
+}
+

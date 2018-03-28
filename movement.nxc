@@ -1,0 +1,81 @@
+#include "configuration.nxh"
+
+bool move_queue = 0;
+int startAngle = 0;
+bool z = 0;
+
+void edgeBounce(void);
+void searchEnemy(void);
+
+task movement() {
+    start edgeDetection;
+	start enemyDetection;
+    
+	if (clap_status==1)
+		NumOut(0, LCD_LINE6, clap_status);
+		Wait(100);
+		ClearScreen();
+	
+    while (true) {
+        if (clap_status==0)
+			Off(ALL_MOTORS);
+		
+		if (clap_status==1)
+		{
+				if (edgeDetected)
+					edgeBounce();
+
+				else if (!enemyFound)
+					searchEnemy();
+		
+				else if (enemyFound)
+				{
+					OnFwdSync(BOTH_MOTORS, FORWARD_SPEED, 0);
+					until(edgeDetected);
+				}
+		}
+		   
+    }
+}
+
+void edgeBounce(void) {
+    PlayTone(100,200);
+	OnRevSync(BOTH_MOTORS, FORWARD_SPEED, 0);
+    Wait(500);
+    OnFwdSync(BOTH_MOTORS, ROTATE_SPEED, 100);
+    Wait(300);
+    Off(BOTH_MOTORS);
+}
+
+void searchEnemy(void) {
+	NumOut(0, LCD_LINE1, move_queue);
+	startAngle = MotorRotationCount(RIGHT_MOTOR);
+	
+    if (move_queue == 0)
+	{
+		OnFwdSync(BOTH_MOTORS, FORWARD_SPEED, 0);
+		until(edgeDetected || clap_status==0 || MotorRotationCount(RIGHT_MOTOR) > startAngle + 2160 || enemyFound);
+		move_queue = 1;
+	}
+	
+	else if (move_queue == 1)
+	{
+		if(z)
+		{
+			OnFwdSync(BOTH_MOTORS, ROTATE_SPEED, 100);
+			until(edgeDetected || clap_status==0 || MotorRotationCount(RIGHT_MOTOR) > startAngle + 1080 || enemyFound);
+			move_queue = 0;
+			z = !z;
+		}
+		
+		else if (!z)
+		{
+			OnFwdSync(BOTH_MOTORS, ROTATE_SPEED, -100);
+			until(edgeDetected || clap_status==0 || MotorRotationCount(RIGHT_MOTOR) > startAngle + 1080 || enemyFound);
+			move_queue = 0;
+			z = !z;
+		}	
+		
+	}
+
+}

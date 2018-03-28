@@ -1,0 +1,42 @@
+#include "configuration.nxh"
+
+// Updated enemyFound when there is an object in front within
+// ULTRASONIC_DETECTION_DISTANCE. This indicated that the opponent
+// robot is likely in front.
+
+bool flip_status;
+int k;
+
+
+void flipEnemy()
+{
+      RotateMotor(FLIP_MOTOR, FLIP_SPEED, -FLIP_ANGLE);
+      until (ULTRASONIC_SENSOR >= ULTRASONIC_DETECTION_DISTANCE);
+      RotateMotor(FLIP_MOTOR, FLIP_SPEED, FLIP_ANGLE);
+
+}
+
+
+task enemyDetection()
+{
+	while (true) 
+	{
+    Wait(100);
+    ClearScreen();
+    
+    if (ULTRASONIC_SENSOR < ULTRASONIC_DETECTION_DISTANCE) {
+            // Debugging tone. Kept since it does no harm, and gives us
+            // a better indication of what happens in the competition.
+            //PlayTone(TONE_B4, 100);
+            enemyFound = true;
+            //OnFwdSync(BOTH_MOTORS, FORWARD_SPEED, 0);
+
+        }
+
+	else if (ULTRASONIC_SENSOR >= ULTRASONIC_DETECTION_DISTANCE)
+        {
+            enemyFound = false;
+        }
+         
+    }
+}
