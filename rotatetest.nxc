@@ -1,0 +1,19 @@
+#include "configuration.nxh"
+
+// Updated enemyFound when there is an object in front within
+// ULTRASONIC_DETECTION_DISTANCE. This indicated that the opponent
+// robot is likely in front.
+
+
+task main()
+{
+    SetSensorUltrasonic(IN_1);
+    SetSensorTouch(IN_2);
+    SetSensorSound(IN_3);
+    SetSensorLight(IN_4);
+
+
+    OnRevSync(BOTH_MOTORS, FORWARD_SPEED, 90);
+
+}
+

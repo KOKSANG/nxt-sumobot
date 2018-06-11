@@ -1,0 +1,52 @@
+#include "configuration.nxh"
+#include "movement.nxc"
+#include "ldr.nxc"
+#include "flip.nxc"
+#include "clap.nxc"
+
+
+task main()
+{
+    SetSensorUltrasonic(IN_1);
+    SetSensorTouch(IN_2);
+    SetSensorSound(IN_3);
+    SetSensorLight(IN_4);
+
+    RotateMotor(FLIP_MOTOR, FLIP_SPEED, FLIP_ANGLE);
+    
+    start clapDetection;
+    
+    if(clap_status==0)
+    {
+     until (clap_status==1);
+     OnRevSync(BOTH_MOTORS, FORWARD_SPEED, -100);
+     Wait(500);
+    }
+    
+    start edgeDetection;
+    start movement;
+    //start enemyDetection;
+    //start flipEnemy;
+
+
+    while(true)
+    {
+      //PlayTone(1000, 10);
+
+      NumOut(0, LCD_LINE1, (initial_light - LDR_DETECTION_LIMIT));
+      NumOut(0, LCD_LINE2, clap_status);
+      NumOut(0, LCD_LINE3, edgeDetected);
+      NumOut(0, LCD_LINE4, enemyFound);
+      NumOut(0, LCD_LINE5, ULTRASONIC_SENSOR);
+      Wait(100);
+      ClearScreen();
+      
+
+
+
+
+    }
+}
+
+
+
